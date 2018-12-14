@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <title>youtube-dl helper</title>
+    <meta name="description" content="">
+    <meta name="author" content="boblemarin">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      html { box-sizing: border-box; }
+      *, *:before, *:after { box-sizing: inherit; }
+
+      body {
+        line-height: 1.4em;
+        font-size: 1.2em;
+        font-family: Helvetica;
+      }
+
+      #app {
+        display: block;
+        max-width: 700px;
+        margin: auto;
+      }
+      h1 {
+        text-align: center;
+      }
+      h2 {
+        margin: 2em 0 0 0;
+        position: relative;
+      }
+      p {
+        clear: both;
+      }
+      .terminal-icon {
+        float: left;
+        margin-right: 10px;
+      }
+      ul {
+        font-size: 0.8em;
+        padding: 0.5em;
+        list-style-type: none;
+      }
+      .input-box {
+        position: relative;
+      }
+      .input-box-help {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 1.2em;
+        height: 1.2em;
+        border-radius: 50%;
+        border: 1px dotted #888;
+        text-align: center;
+        line-height: 1.2em;
+        cursor: pointer;
+      }
+      .input-box-input {
+        margin-top: 5px;
+        padding: 5px;
+        width: 100%;
+        border: 1px dotted black;
+      }
+      code {
+        position: relative;
+        margin: 0.5;
+        display: block;
+        background: #EEE;
+        border: 1px solid #888;
+        padding: 5px;
+        cursor: pointer;
+      }
+      code:hover {
+        border-color: #000;
+      }
+
+      code:hover:before {
+        content: "click/copy > ";
+        position: absolute;
+        right: 100%;
+        font-size: 0.8em;
+        opacity: 0.7;
+        white-space: nowrap;
+        padding-right: 5px;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <h1>youtube-dl helper</h1>
+    <span id="app">
+      <span class="input-box">
+        <span class="input-box-title">URL</span>
+        <span class="input-box-help">?</span>
+        <input type="text" class="input-box-input" v-model="url">
+      </span>
+
+      <span v-if="url">
+        <h2>Terminal commands</h2>
+        <p>
+          <img src="terminal.png" class="terminal-icon" style="float:left">
+          <ul>
+            <li>- open Terminal.app (in /Applications/Utilities/)</li>
+            <li>- click on the following commands to copy them into your clipboard.</li>
+            <li>- paste them (⌘+v) in the terminal</li>
+          </ul>
+        </p>
+        <p>
+          simple download (auto-select best version) :
+          <code>youtube-dl {{url}}</code>
+        </p>
+
+        <p>
+          get available formats :
+          <code>youtube-dl -F {{url}}</code>
+        </p>
+
+        <p>
+          download format id #<input type="text" size="5" v-model="format"> :
+          <code>youtube-dl -f {{format}} {{url}}</code>
+        </p>
+
+      </span>
+
+      <h2>Maintenance</h2>
+      <p>
+        update youtube-dl (when download fails)
+        <code>sudo youtube-dl -U</code>
+      </p>
+    </span>
+
+  
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!-- dev -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> --> <!-- prod -->
+    <script type="text/javascript">
+      var app = new Vue({
+        el: '#app',
+        data: {
+          url: '9CMGiddy0xw',
+          format: ''
+        }
+      });
+
+      document.addEventListener("click", (e) => {
+        if ( e.target.nodeName == "CODE" ) {
+          copyTextToClipboard(e.target.innerText);
+        }
+      });
+
+
+      /* copy functions from SO : https://stackoverflow.com/a/30810322/625682 */
+
+      function fallbackCopyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+          var successful = document.execCommand('copy');
+          var msg = successful ? 'successful' : 'unsuccessful';
+          console.log('Fallback: Copying text command was ' + msg);
+        } catch (err) {
+          console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
+      }
+      function copyTextToClipboard(text) {
+        if (!navigator.clipboard) {
+          fallbackCopyTextToClipboard(text);
+          return;
+        }
+        navigator.clipboard.writeText(text).then(function() {
+          console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+          console.error('Async: Could not copy text: ', err);
+        });
+      }
+    </script>
+  </body>
+</html>
