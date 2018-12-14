@@ -94,7 +94,7 @@
     <span id="app">
       <span class="input-box">
         <span class="input-box-title">URL</span>
-        <span class="input-box-help">?</span>
+        <span class="input-box-help" title="Youtube ID or full URL. Also SoundCloud, Bandcamp, Facebook, Vimeo or any other link.">?</span>
         <input type="text" class="input-box-input" v-model="url">
       </span>
 
@@ -127,8 +127,9 @@
 
       <h2>Maintenance</h2>
       <p>
-        update youtube-dl (when download fails)
+        when download fails, update youtube-dl
         <code>sudo youtube-dl -U</code>
+        <small>(requires admin password)</small>
       </p>
       <p>
         more information and downloads : <a href="http://rg3.github.io/youtube-dl/">youtube-dl website</a>
